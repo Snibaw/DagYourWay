@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,8 +15,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
         if (Input.GetMouseButtonDown(0))
         {
+            Time.timeScale = 0.5f;
             if (projectile != null)
             {
                 transform.position = projectile.transform.position;
@@ -29,8 +36,9 @@ public class PlayerMovement : MonoBehaviour
             Vector3 playerPosition = Camera.main.WorldToScreenPoint(transform.position);
             Vector3 direction = Input.mousePosition - playerPosition;
             direction = new Vector3(direction.x, direction.y, 0).normalized;
-            projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            projectile = Instantiate(projectilePrefab, transform.position + new Vector3(0,2,0), Quaternion.identity);
             projectile.transform.forward = direction;
+            Time.timeScale = 1;
         }
     }
 }

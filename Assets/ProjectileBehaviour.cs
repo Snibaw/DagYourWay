@@ -6,15 +6,10 @@ using UnityEngine;
 public class ProjectileBehaviour : MonoBehaviour
 {
     public float speed = 10f;
-    private Rigidbody rb;
-
-    private void Start()
+    
+    void FixedUpdate()
     {
-        rb=GetComponent<Rigidbody>();
-    }
-    void Update()
-    {
-        rb.velocity = transform.forward * speed;
+        transform.position += transform.forward * (speed * Time.fixedDeltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,10 +21,11 @@ public class ProjectileBehaviour : MonoBehaviour
         }
         else if (other.CompareTag("Wall"))
         {
-            //Bounce
+            // Bounce
             Vector3 normal = other.ClosestPoint(transform.position) - transform.position;
             normal.Normalize();
-            transform.forward = Vector3.Reflect(transform.forward, normal);
+            Vector3 forward = Vector3.Reflect(transform.forward, normal);
+            transform.forward = new Vector3(forward.x, forward.y, 0).normalized;
         }
     }
 }
